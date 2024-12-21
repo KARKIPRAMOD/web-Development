@@ -7,6 +7,9 @@ dotenv.config();
 const PORT = 8000;
 const app = express();
 
+//middleware to parse incoming requests with JSON payloads
+app.use(express.json());
+
 
 app.use("/api/auth", authRoutes);
 

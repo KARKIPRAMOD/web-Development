@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-const { type } = require("os");
 
 const UserSchema = new mongoose.Schema({
     name:{
@@ -12,16 +11,31 @@ const UserSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        reauired: true,
+        required: true,
         unique: true,
     },
     password:{
         type: String,
         required: true
-    }
+    },
+    lastLogin:{
+        type: Date,
+        default: Date.now(),
+    },
 
-});
+    // isVerified:{
+    //     type: Boolean,
+    //     default: false,
+    // },
 
+    // resetPasswordToken: String,
+    // resetPasswordExperiesAt: Date,
+    // verificationToken: String,
+    // vertficationTokenExpiresAt: Date,
+
+},{timestamps: true}
+);
+ 
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+export default User;
