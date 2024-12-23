@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from  "bcrypt";
-import { PassThrough } from "stream";
+import { v4 as uuidv4} from "uuid";
+import {setUser} from "../utils/auth.js";
 
 export const signup = async (req,res) => {
 
@@ -20,13 +21,48 @@ export const signup = async (req,res) => {
             email, name,username, password:hashPassword,
         });
         await user.save();
+        res.status(200).json({
+            succes: true,
+            message: "User Created Successfully"
+        });
     } catch (error) {
         res.status(400).json({success:false,message : error.message});
     }
 };
 
+
 export const login = async (req,res) => {
-    res.send("Login Route");
+    try {
+        const {email, username, password} = req.body;
+        if(!email && !username || !password){
+            return res.status(400).json({Message: "All fields are required"});
+        }
+
+        const user = await User.findOne({$or: [{email},{username}]});
+        if(!user){
+            return res.status(400).json({message: "User not found"});
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+           return res.status(400).json({message: "Invalid Password"});
+        }    
+        const sessionID = uuidv4();
+        setUser(sessionID,user._id);
+        res.cookie('uid',sessionID);
+
+        res.status(200).json({
+            Success: true,
+            message: "Login Successful"
+        });
+
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message:error.message
+        })
+    }
 };
 
 export const logout = async (req,res) => {

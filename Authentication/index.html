@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+</head>
+<body>
+  <h1>Signup Form</h1>
+  <form id="signupForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="Name" required /><br />
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="Username" required /><br />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Email" required /><br />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Password" required /><br />
+
+    <button type="submit">Sign Up</button>
+  </form>
+  <div id="responseMessage" style="margin-top: 10px; color: green;"></div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault(); // Prevent the default form submission
+
+      // Get the input values
+      const name = document.getElementById("name").value;
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Send a POST request to the backend running on port 8000
+      try {
+        const response = await fetch("http://localhost:8000/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, username, email, password }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById("responseMessage").style.color = "green";
+          document.getElementById("responseMessage").innerText =
+            "Signup successful! Please login.";
+        } else {
+          document.getElementById("responseMessage").style.color = "red";
+          document.getElementById("responseMessage").innerText =
+            "Error: " + result.message;
+        }
+      } catch (error) {
+        console.error("Error signing up:", error);
+        document.getElementById("responseMessage").style.color = "red";
+        document.getElementById("responseMessage").innerText =
+          "Error signing up. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
