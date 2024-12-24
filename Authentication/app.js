@@ -10,13 +10,15 @@ dotenv.config();
 const PORT = 8000;
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename); 
 //setup ejs as template engine
 app.set("view engine", "ejs");
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); 
 app.set('views', path.join(__dirname,"views"));
 
 //middleware to parse incoming requests with JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.json());
 
 

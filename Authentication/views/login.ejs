@@ -7,9 +7,9 @@
 </head>
 <body>
     <h1>Login</h1>
-    <form action="/login" method="post">
-        <input type="text" id="usernamr Or Email">
-        <input type="text"id="password">
+    <form action="/api/auth/login" method="POST">
+        <input type="text" id="email" name = "email">
+        <input type="text" id="password" name="password">
         <button type="submit">LogIN</button>
     </form>
 </body>
