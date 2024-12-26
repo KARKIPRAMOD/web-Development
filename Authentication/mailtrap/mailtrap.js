@@ -24,4 +24,4 @@ client
     text: "Congrats for sending test email with Mailtrap!",
     category: "Integration Test",
   })
-  .then(console.log, console.error);
+  .then(console.log, console.error);   

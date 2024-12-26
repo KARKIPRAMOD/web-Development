@@ -2,9 +2,10 @@ import express from "express";
 import { ConnectDB } from "./connection.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
+import todoRoutes from "./routes/todo.js"
 import path from 'path';  // Import path module
 import { fileURLToPath } from 'url'; 
-
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const PORT = 8000;
@@ -21,8 +22,10 @@ app.set('views', path.join(__dirname,"views"));
 app.use(express.urlencoded({ extended: true })); // Parse form data
 app.use(express.json());
 
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use(todoRoutes);
 
 app.listen(PORT, ()=>{
     ConnectDB();

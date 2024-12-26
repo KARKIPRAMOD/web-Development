@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TODO List</title>
 </head>
 <body>
-    
+    <h1>TODO List</h1>
+
+    <form action="/api/auth/todo/add" method="post">
+        <input type="text" name="task" placeholder="Add a new task" required>
+        <input type="datetime-local" name="deadline"> <!-- Added deadline input -->
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Your Tasks</h2>
+    <ul>
+        <!-- Iterate through todos array and display each task -->
+        <% todos.forEach(todo => { %>
+            <li>
+                <strong><%= todo.task %></strong>
+                <% if (todo.desadLine) { %>
+                    - Deadline: <%= new Date(todo.deadLine).toLocaleString() %>
+                <% } else { %>
+                    - No Deadline
+                <% } %>
+                <a href="/api/auth/todo/delete/<%= todo._id %>">Delete</a>
+            </li>
+        <% }) %>
+    </ul>
 </body>
 </html>

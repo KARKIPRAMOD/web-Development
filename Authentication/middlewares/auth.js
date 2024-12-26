@@ -1,11 +1,22 @@
-import { getUser } from "../utils/auth.js"
-async function restricedToLoggedUserOnly(req,re,next){
-    const userId = req.cookies.uid;
+import { getUser } from "../utils/auth.js";
 
-    if(!userId) return restricedToLoggedUserOnly.redirect("/api/auth/login");
-    
+export async function restricedToLoggedUserOnly(req, res, next) {
+    console.log('Cookies on this request:', req.cookies);  
+
+    const userId = req.cookies?.uid;
+    console.log('Extracted userId:', userId);  
+    if (!userId) {
+        console.log('No userId cookie found, redirecting to login');
+        return res.redirect("/api/auth/login");
+    }
+
     const user = getUser(userId);
 
-
+    if (!user) {
+        console.log('User not found with id:', userId);
+        return res.redirect("/api/auth/login");
+    }
+    console.log("user",user);
+    req.user = user;  
     next();
 }
